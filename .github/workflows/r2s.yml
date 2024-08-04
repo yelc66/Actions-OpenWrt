@@ -64,11 +64,25 @@ jobs:
         cd openwrt
         $GITHUB_WORKSPACE/$DIY_P1_SH
         rm -rf feeds/packages/lang/golang
-        git clone https://github.com/sbwml/packages_lang_golang -b 22.x feeds/packages/lang/golang
-
+        git clone https://github.com/kenzok8/golang feeds/packages/lang/golang
 
     - name: Update feeds
       run: cd openwrt && ./scripts/feeds update -a
+
+    - name: Check Go version
+      run: |
+        cd openwrt
+        go_version=$(go version | awk '{print $3}' | sed 's/go//')
+        required_version="1.22.4"
+        if [ "$(printf '%s\n' "$required_version" "$go_version" | sort -V | head -n1)" != "$required_version" ]; then
+          echo "Go version is less than $required_version, updating..."
+          wget https://golang.org/dl/go$required_version.linux-amd64.tar.gz
+          sudo tar -C /usr/local -xzf go$required_version.linux-amd64.tar.gz
+          export PATH=$PATH:/usr/local/go/bin
+          go version
+        else
+          echo "Go version is sufficient: $go_version"
+        fi
 
     - name: Remove specific feeds
       run: |
