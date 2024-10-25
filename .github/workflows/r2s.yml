@@ -58,8 +58,10 @@ jobs:
         cd openwrt
         $GITHUB_WORKSPACE/$DIY_P1_SH
         ./scripts/feeds update -a
-        rm -rf feeds/smpackage/{base-files,dnsmasq,firewall*,fullconenat,libnftnl,nftables,ppp,opkg,ucl,upx,vsftpd*,miniupnpd-iptables,wireless-regdb}
+        # Install all feeds first
         ./scripts/feeds install -a
+        # Now remove specific feeds
+        rm -rf feeds/smpackage/{base-files,dnsmasq,firewall*,fullconenat,libnftnl,nftables,ppp,opkg,ucl,upx,vsftpd*,miniupnpd-iptables,wireless-regdb}
         rm -rf feeds/packages/lang/golang
         git clone https://github.com/kenzok8/golang feeds/packages/lang/golang
         [ -e files ] && mv files openwrt/files
