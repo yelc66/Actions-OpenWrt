@@ -57,12 +57,12 @@ jobs:
         git clone $REPO_URL -b $REPO_BRANCH openwrt
         ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
 
-    - name: Load custom feeds
-      run: |
-        [ -e $FEEDS_CONF ] && mv $FEEDS_CONF openwrt/feeds.conf.default
-        chmod +x $DIY_P1_SH
-        cd openwrt
-        $GITHUB_WORKSPACE/$DIY_P1_SH
+    # - name: Load custom feeds
+    #   run: |
+    #     [ -e $FEEDS_CONF ] && mv $FEEDS_CONF openwrt/feeds.conf.default
+    #     chmod +x $DIY_P1_SH
+    #     cd openwrt
+    #     $GITHUB_WORKSPACE/$DIY_P1_SH
 
 
 
@@ -73,8 +73,6 @@ jobs:
     - name: Install feeds
       run: |
         cd openwrt && ./scripts/feeds install -a
-        rm -rf feeds/packages/lang/golang
-        git clone https://github.com/kenzok8/golang feeds/packages/lang/golang
 
     - name: Remove specific feeds
       run: |
@@ -92,8 +90,10 @@ jobs:
         [ -e $CONFIG_FILE ] && mv $CONFIG_FILE openwrt/.config
         chmod +x $DIY_P2_SH
         cd openwrt
-        rm -rf feeds/packages/lang/golang
-        git clone https://github.com/kenzok8/golang feeds/packages/lang/golang
+        cd package/lean
+        rm -rf luci-theme-argon
+        git clone https://github.com/jerrykuku/luci-theme-argon.git luci-theme-argon
+        cd ../..
         $GITHUB_WORKSPACE/$DIY_P2_SH
 
     - name: Download package
