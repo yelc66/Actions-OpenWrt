@@ -1,4 +1,4 @@
-name: x86_R24-10
+name: LEDE_R24-10
 
 on:
   repository_dispatch:
