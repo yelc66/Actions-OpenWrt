@@ -1,4 +1,4 @@
-name: LEDE_R24-10
+name: LEDE_R25-03
 
 on:
   repository_dispatch:
