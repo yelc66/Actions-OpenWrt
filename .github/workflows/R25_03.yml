@@ -1,4 +1,4 @@
-name: LEDE_R25-03
+name: LEDE_R24-10
 
 on:
   repository_dispatch:
@@ -49,18 +49,17 @@ jobs:
     - name: 安装 feeds 包
       run: |
         cd openwrt && ./scripts/feeds install -a
-        
-    - name: 🛠 修改默认配置
-      working-directory: ./openwrt
-      run: |
-        sed -i 's/192.168.1.1/10.159.1.67/g' package/base-files/files/bin/config_generate
-        sed -i 's/LEDE/LuckyWrt/g' package/base-files/files/bin/config_generate
-        
+
     - name: 加载自定义配置
       run: |
         [ -e files ] && mv files openwrt/files
         [ -e $CONFIG_FILE ] && mv $CONFIG_FILE openwrt/.config
+
+    - name: 🛠 修改默认配置
+      run: |
         cd openwrt
+        sed -i 's/192.168.1.1/10.159.1.67/g' package/base-files/files/bin/config_generate
+        sed -i 's/LEDE/LuckyWrt/g' package/base-files/files/bin/config_generate
 
     - name: 下载软件包
       id: package
